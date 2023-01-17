@@ -94,7 +94,7 @@
 				<!-- Confirmation -->
 				<div v-if="claimed">
 					<p>Congratulations! You have claimed the {{ scholarship_name }} scholarship worth {{ scholarship_value }}.</p>
-					<p>You can view more details and accept your scholarship at {{cta_link}}.</p>
+					<p>You can view more details and accept your scholarship at {{ cta_link }}.</p>
 				</div>
 			</div>
 	</div>
@@ -115,13 +115,11 @@ export default {
 			firstyear_gpa_score: 0,
 			transfer_gpa_score: 0,
 			noTestScore: 0,
-
 			index_level: 0,
 			scholarship_name: 0,
 			scholarship_value: 0,
 			scholarship_year_value: 0,
 			cta_link: '',
-
 			agreedToTerms: false,
 			claimed: false,
 		};
@@ -134,33 +132,28 @@ export default {
 				this.$refs.scholarship_transferstudent_div.classList.add('hidden');
 				this.Update_FirstYearStudent_Score();
 			});
-
 			// If they choose TRANSFER student
 			this.$refs.scholarship_transferstudent_radio.addEventListener('click', () => {
 				this.$refs.scholarship_firstyearstudent_div.classList.remove('hidden');
 				this.$refs.scholarship_transferstudent_div.classList.add('hidden');
 				this.Update_TransferStudent_Score();
 			});
-
 			// If they change the value for ACT score
 			this.$refs.actslider.addEventListener('change', () => {
 				this.Get_ACT_Score();
 				this.Update_FirstYearStudent_Score();
 			});
-
 			// If they change the value for FIRST YEAR GPA score
 			this.$refs.gpaslider.addEventListener('change', () => {
 				this.Get_FirstYearGPA_Score();
 				this.Update_FirstYearStudent_Score();
 			});
-
 			// If they change the value for TRANSFER GPA score
 			this.$refs.gpatransferslider.addEventListener('change', () => {
 				this.Get_TransferGPA_Score();
 				this.Update_TransferStudent_Score();
 			});
 		},
-
 		// Gets values from the form for ACT score and validates
 		Get_ACT_Score() {
 			this.act_score = parseInt(this.$refs.actslider.value);
@@ -182,17 +175,14 @@ export default {
 				return 'ERROR - Invalid ACT Value';
 			}
 		},
-
 		// Gets values from the form for First Year GPA score and validates
 		Get_FirstYearGPA_Score() {
 			this.firstyear_gpa_score = parseFloat(this.$refs.gpaslider.value);
 		},
-
 		// Gets values from the form for Transfer GPA score and validates
 		Get_TransferGPA_Score() {
 			this.transfer_gpa_score = parseFloat(this.$refs.gpatransferslider.value);
 		},
-
 		// Takes the ACT and FIRST YEAR GPA and runs the ACADEMIC RATING formula
 		Update_FirstYearStudent_Score() {
 			// one of the numbers are not valid so we return a 0 scholarship
@@ -270,7 +260,6 @@ export default {
 				$("#forScholarship").css("color", "#F6AF32");
 			}
 		},
-
 		Update_NewStudent_Index_Score(academic_rating) {
 			if (academic_rating >= 173) {
 				this.index_level = 1;
@@ -297,6 +286,10 @@ export default {
 				this.scholarship_year_value = 2000;
 				this.scholarship_name = "Black & Gold Scholarship";
 				this.cta_link = "black-gold-scholarship";
+				$("#agree-wrapper").removeClass("hidden");
+				$("#contact-admissions").addClass("hidden");
+				$("#additional-scholarships").removeClass("hidden");
+				$("#scholarship-form").attr("action", "https://www.fhsu.edu/finaid/scholarships/black-gold-scholarship" + "?act_sat_score=" + this.act_score + "&cumulative_high_school_gpa=" + this.firstyear_gpa_score);
 			} else if ((academic_rating >= 142 && this.academic_rating < 153) && (this.noTestScore.value != 0)) {
 				this.index_level = 4;
 				this.scholarship_name = "Hays City Scholarship";
@@ -362,11 +355,9 @@ export default {
     -webkit-transition: 0.2s;
     transition: 0.2s;
 }
-
 .slider-component .slidecontainer .slider:hover {
     opacity: 1;
 }
-
 .slider-component .slidecontainer .slider::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
@@ -376,7 +367,6 @@ export default {
     cursor: pointer;
     border-radius: 50%;
 }
-
 #actslider,
 #gpaslider,
 #gpatransferslider {
@@ -386,7 +376,6 @@ export default {
     outline: none;
     border-radius: 4px;
 }
-
 #actslider::-webkit-slider-thumb,
 #gpaslider::-webkit-slider-thumb,
 #gpatransferslider::-webkit-slider-thumb {
@@ -397,11 +386,9 @@ export default {
     z-index: 3;
     position: relative;
 }
-
 .scholarships-card {
         display: none;
     }
-
     .scholarships-card {
         border: 1px solid #d1d1d1;
         float: left;
@@ -414,20 +401,16 @@ export default {
         margin: 5px;
         border-radius: 3px;
     }
-
-
     em:before {
         content: "";
         display: block;
         margin-top: 40px;
     }
-
     .scholarship-form {
         border: 1px solid #c1c1c1;
         padding: 15px;
         border-radius: 4px;
     }
-
     .scholarship-form em {
         font-size: .9rem;
         }
@@ -436,90 +419,72 @@ export default {
             width: 100px;
             float: left;
         }
-
     label {
         float: left;
         padding: 0 5px
     }
-
         label[for="gpa"] {
             padding-left: 25px;
         }
-
     .hidden {
         display: none;
     }
-
     .i-am-radio {
         padding-right: 30px;
         font-weight: bold;
         margin: 8px 0 0 7px;
     }
-
     .form-label {
         font-weight: bold;
         margin-left: -5px;
     }
-
     .form-row:after {
         content: "";
         padding: 15px;
         margin: 15px;
     }
-
     .help-text {
         font-size: 13px;
         float: right;
         margin-top: -12px;
     }
-
     #scholarship_indexlevel {
         text-align: center;
         margin-top: 40px;
     }
-
     .form-row, .col-lg-10 {
         margin: 0 !important;
         display: inline;
     
     }
-
     .scholarship-form h3 {
         font-size: 1.6rem;
         background: #fff;
         text-align: center;
     }
-
     #scholarship_firstyearstudent_div {
         padding-top: 20px;
     }
-
 	#scholarship_transferstudent_div {
         padding-top: 20px;
     }
-
-
 .additional-scholarships{
 margin-left: 30px;
 }
-
 #scholarship_indexlevel{
 padding-bottom: 50px;
 padding-top: 40px;
 display: block;
 margin: 40px auto 0 auto !important;;
 }
-
 #scholarship_indexlevel h3{
 width: 100%;
 }
-
 .additional-scholarships-row {
   display: flex;
   flex-wrap: wrap;
   margin-top: 1rem;
 }
-
 .additional-scholarships-column {
   flex-grow: 1;
   flex-basis: 50%;  
@@ -533,15 +498,12 @@ font-size: 12px;
 max-width: 82%;
 padding: 15px 10px 5px 10px;
 }
-
-
 label[for="agree"]{
 font-size: 14px;
 margin: 0 0 0 200px;
 margin-top: -5px;
 font-weight: bold;
 }
-
 #contact-admissions h3{
 width: 100%;
 }
@@ -550,11 +512,9 @@ background: #e1e1e1;
 margin-top: -20px;
 border-radius: 4px;
 }
-
 .additional-scholarships em{
 font-size: 12.5px !important;
 }
-
 .scholarship-form-header{
 margin-left: auto;
 margin-right: auto;
@@ -564,12 +524,10 @@ width: 65%;
 margin-left: auto !important;
 margin-right: auto !important;
 }*/
-
 .custom-select{
 background: none;
 }
 /*.additional-scholarships-row h2{
     font-size: 1rem;
 }*/
-
 </style>

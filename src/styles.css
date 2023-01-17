@@ -8,3 +8,189 @@ body {
     font-family: 'Open Sans', 'Barlow Semi Condensed', 'Barlow', sans-serif;
 }
 
+.slider-component .slidecontainer .slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    border-radius: 2px;
+    background: #fbf0cd;
+    outline: none;
+    opacity: 1;
+    -webkit-transition: 0.2s;
+    transition: 0.2s;
+}
+.slider-component .slidecontainer .slider:hover {
+    opacity: 1;
+}
+.slider-component .slidecontainer .slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    background: #fcb817;
+    cursor: pointer;
+    border-radius: 50%;
+}
+#actslider,
+#gpaslider,
+#gpatransferslider {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 10px;
+    outline: none;
+    border-radius: 4px;
+}
+#actslider::-webkit-slider-thumb,
+#gpaslider::-webkit-slider-thumb,
+#gpatransferslider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    z-index: 3;
+    position: relative;
+}
+.scholarships-card {
+        display: none;
+    }
+    .scholarships-card {
+        border: 1px solid #d1d1d1;
+        float: left;
+        width: 48%;
+        height: 200px;
+        padding: 20px;
+        text-transform: uppercase;
+        font-weight: bold;
+        text-align: center;
+        margin: 5px;
+        border-radius: 3px;
+    }
+    em:before {
+        content: "";
+        display: block;
+        margin-top: 40px;
+    }
+    .scholarship-form {
+        border: 1px solid #c1c1c1;
+        padding: 15px;
+        border-radius: 4px;
+    }
+    .scholarship-form em {
+        font-size: .9rem;
+        }
+        .scholarship-form
+        input[type="text"] {
+            width: 100px;
+            float: left;
+        }
+    label {
+        float: left;
+        padding: 0 5px
+    }
+        label[for="gpa"] {
+            padding-left: 25px;
+        }
+    .hidden {
+        display: none;
+    }
+    .i-am-radio {
+        padding-right: 30px;
+        font-weight: bold;
+        margin: 8px 0 0 7px;
+    }
+    .form-label {
+        font-weight: bold;
+        margin-left: -5px;
+    }
+    .form-row:after {
+        content: "";
+        padding: 15px;
+        margin: 15px;
+    }
+    .help-text {
+        font-size: 13px;
+        float: right;
+        margin-top: -12px;
+    }
+    #scholarship_indexlevel {
+        text-align: center;
+        margin-top: 40px;
+    }
+    .form-row, .col-lg-10 {
+        margin: 0 !important;
+        display: inline;
+    
+    }
+    .scholarship-form h3 {
+        font-size: 1.6rem;
+        background: #fff;
+        text-align: center;
+    }
+    #scholarship_firstyearstudent_div {
+        padding-top: 20px;
+    }
+	#scholarship_transferstudent_div {
+        padding-top: 20px;
+    }
+.additional-scholarships{
+margin-left: 30px;
+}
+#scholarship_indexlevel{
+padding-bottom: 50px;
+padding-top: 40px;
+display: block;
+margin: 40px auto 0 auto !important;;
+}
+#scholarship_indexlevel h3{
+width: 100%;
+}
+.additional-scholarships-row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+.additional-scholarships-column {
+  flex-grow: 1;
+  flex-basis: 50%;  
+  padding: 5px;
+  float: left;
+}
+.agree-wrapper{
+margin-left: auto;
+margin-right: auto;
+font-size: 12px;
+max-width: 82%;
+padding: 15px 10px 5px 10px;
+}
+label[for="agree"]{
+font-size: 14px;
+margin: 0 0 0 200px;
+margin-top: -5px;
+font-weight: bold;
+}
+#contact-admissions h3{
+width: 100%;
+}
+#agree-wrapper{
+background: #e1e1e1;
+margin-top: -20px;
+border-radius: 4px;
+}
+.additional-scholarships em{
+font-size: 12.5px !important;
+}
+.scholarship-form-header{
+margin-left: auto;
+margin-right: auto;
+width: 65%;
+}
+/*.agree-wrapper p.agree-label label{
+margin-left: auto !important;
+margin-right: auto !important;
+}*/
+.custom-select{
+background: none;
+}
+/*.additional-scholarships-row h2{
+    font-size: 1rem;
+}*/
