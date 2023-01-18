@@ -32,7 +32,7 @@
 						<label for="actslider"></label>
 						<div class="slider-component" id="actslider">
 							<div class="slidecontainer">
-								<input class="slider" type="range" ref="actslider" min="0" max="36" step="1" v-model="act_score" id="actslider">
+								<input class="slider" type="range" ref="actslider" min="17" max="36" step="1" v-model="act_score" id="actslider">
 							</div>
 						</div>
 					</div>
@@ -42,61 +42,76 @@
 						<label for="gpaslider"></label>
 						<div class="slider-component" id="gpaslider">
 							<div class="slidecontainer">
-								<input class="slider" type="range" ref="gpaslider" min="0" max="4.0" step="0.5" v-model="firstyear_gpa_score" id="gpaslider">
+								<input class="slider" type="range" ref="gpaslider" min="1.0" max="4.0" step="0.05" v-model="firstyear_gpa_score" id="gpaslider">
 							</div>
 						</div>
 					</div>
+					<div class="form-group text-center">
+						<button type="submit" class="btn btn-primary btn-sm">Calculate Scholarship</button>
+					</div>
+					<div v-if="scholarship_value">
+						<div class="col-lg-10" id="scholarship_indexlevel">&#160;</div>
+						<div class="agree-wrapper" v-show="scholarship_value && !agreedToTerms" id="agree-wrapper">
+							<p>
+								I understand that the information I am about to preview is an unofficial offer due to self-reported 
+								information. This information is true and correct to the best of my knowledge and ability. 
+								I understand that Scholarship Services at FHSU will verify all self-reported documentation. 
+								I further understand that if I'm reporting my ACT/SAT superscore, I will need to send all 
+								standardized test scores for verification of award.
+							</p>
+							<!-- Terms and Conditions -->
+							<div class="d-flex justify-content-center">
+								<label class="agree-label" for="agree">
+									<input type="checkbox" v-model="agreedToTerms" id="agree" required/>
+									I Understand
+								</label>
+							</div>
+						</div>
+						<div id="additional-scholarships">
+							<p><em>
+								*All first-time, full-time, on-campus Freshman ACT/SAT Scholarships are renewable for three additional years if at least a 3.3 FHSU cumulative GPA is maintained. 
+								FHSU must receive your test scores by June 30, 2022  to be eligible.
+							</em></p>
+						</div>
+					</div>
 				</div>
-			</div>
-		</form>
-		
-		<form @submit.prevent="calculateScholarship" method="POST" id="scholarship-form">
-			<div class="form-row leftfix hidden" ref="scholarship_transferstudent_div" id="scholarship_transferstudent_div">
-				<div v-if="studentType === 'transfer'">
+
+				<div v-else>
 					<div class="col-lg-10">
 						<p>To calculate your estimated award amount, enter your non-weighted cumulative GPA.</p>
 						<h4 class="text-left">Transfer GPA: <span>{{ transfer_gpa_score }}</span></h4>
 						<label for="gpatransferslider"></label>
 						<div class="slider-component" id="gpatransferslider">
 							<div class="slidecontainer">
-								<input class="slider" type="range" ref="gpatransferslider" min="0" max="4.0" step="0.5" v-model="transfer_gpa_score" id="gpatransferslider">
+								<input class="slider" type="range" ref="gpatransferslider" min="1.0" max="4.0" step="0.05" v-model="transfer_gpa_score" id="gpatransferslider">
+							</div>
+						</div>
+					</div>
+					<div class="form-group text-center">
+						<button type="submit" class="btn btn-primary btn-sm">Calculate Scholarship</button>
+					</div>
+					<div v-if="scholarship_value">
+						<div class="col-lg-10" id="scholarship_indexlevel">&#160;</div>
+						<div class="agree-wrapper" v-show="scholarship_value && !agreedToTerms" id="agree-wrapper">
+							<p>
+								I understand that the information I am about to preview is an unofficial offer due to self-reported 
+								information. This information is true and correct to the best of my knowledge and ability. 
+								I understand that Scholarship Services at FHSU will verify all self-reported documentation. 
+								I further understand that if I'm reporting my ACT/SAT superscore, I will need to send all 
+								standardized test scores for verification of award.
+							</p>
+							<!-- Terms and Conditions -->
+							<div class="d-flex justify-content-center">
+								<label class="agree-label" for="agree">
+									<input type="checkbox" v-model="agreedToTerms" id="agree" required/>
+									I Understand
+								</label>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</form>
-			
-			<button @click="calculateScholarship">Calculate Scholarship</button>
-			<div v-if="scholarship_value">
-				<div class="col-lg-10" id="scholarship_indexlevel">&#160;</div>
-				<div class="agree-wrapper hidden" v-if="scholarship_value && !agreedToTerms" id="agree-wrapper">
-					<p>
-						I understand that the information I am about to preview is an unofficial offer due to self-reported 
-						information. This information is true and correct to the best of my knowledge and ability. 
-						I understand that Scholarship Services at FHSU will verify all self-reported documentation. 
-						I further understand that if I'm reporting my ACT/SAT superscore, I will need to send all 
-						standardized test scores for verification of award.
-					</p>
-					<!-- Terms and Conditions -->
-					<div>
-						<label class="agree-label" for="agree">
-							<input type="checkbox" v-model="agreedToTerms" id="agree"/>
-							I agree to the terms and conditions
-						</label>
-					</div>
-					<br>
-					<!-- Claim button -->
-					<div>
-						<button :disabled="!agreedToTerms" @click.prevent="claimScholarship">Claim Scholarship</button>
-					</div>
-				</div>
-				<!-- Confirmation -->
-				<div v-if="claimed">
-					<p>Congratulations! You have claimed the {{ scholarship_name }} scholarship worth {{ scholarship_value }}.</p>
-					<p>You can view more details and accept your scholarship at {{ cta_link }}.</p>
-				</div>
-			</div>
 	</div>
 </template>
 
@@ -114,7 +129,6 @@ export default {
 			weighted_score: 0,
 			firstyear_gpa_score: 0,
 			transfer_gpa_score: 0,
-			noTestScore: 0,
 			index_level: 0,
 			scholarship_name: 0,
 			scholarship_value: 0,
@@ -126,34 +140,27 @@ export default {
     },
     methods: {
 		calculateScholarship() {
+			if (this.studentType === 'firstYear') {
+				this.Update_NewStudent_Index_Score();
+			} else {
+				this.Update_TransferStudent_Score();
+			}
+
 			// If they choose FIRST YEAR student
 			this.$refs.scholarship_firstyearstudent_radio.addEventListener('click', () => {
 				this.$refs.scholarship_firstyearstudent_div.classList.remove('hidden');
 				this.$refs.scholarship_transferstudent_div.classList.add('hidden');
-				this.Update_FirstYearStudent_Score();
+				this.Update_NewStudent_Index_Score();
 			});
+
 			// If they choose TRANSFER student
 			this.$refs.scholarship_transferstudent_radio.addEventListener('click', () => {
 				this.$refs.scholarship_firstyearstudent_div.classList.remove('hidden');
 				this.$refs.scholarship_transferstudent_div.classList.add('hidden');
 				this.Update_TransferStudent_Score();
 			});
-			// If they change the value for ACT score
-			this.$refs.actslider.addEventListener('change', () => {
-				this.Get_ACT_Score();
-				this.Update_FirstYearStudent_Score();
-			});
-			// If they change the value for FIRST YEAR GPA score
-			this.$refs.gpaslider.addEventListener('change', () => {
-				this.Get_FirstYearGPA_Score();
-				this.Update_FirstYearStudent_Score();
-			});
-			// If they change the value for TRANSFER GPA score
-			this.$refs.gpatransferslider.addEventListener('change', () => {
-				this.Get_TransferGPA_Score();
-				this.Update_TransferStudent_Score();
-			});
 		},
+
 		// Gets values from the form for ACT score and validates
 		Get_ACT_Score() {
 			this.act_score = parseInt(this.$refs.actslider.value);
@@ -175,39 +182,42 @@ export default {
 				return 'ERROR - Invalid ACT Value';
 			}
 		},
+
 		// Gets values from the form for First Year GPA score and validates
 		Get_FirstYearGPA_Score() {
 			this.firstyear_gpa_score = parseFloat(this.$refs.gpaslider.value);
 		},
+
 		// Gets values from the form for Transfer GPA score and validates
 		Get_TransferGPA_Score() {
 			this.transfer_gpa_score = parseFloat(this.$refs.gpatransferslider.value);
 		},
+
 		// Takes the ACT and FIRST YEAR GPA and runs the ACADEMIC RATING formula
-		Update_FirstYearStudent_Score() {
-			// one of the numbers are not valid so we return a 0 scholarship
-			if (this.act_score == -1 || this.firstyear_gpa_score == -1) {
-				this.weighted_score = -1;
-			// if the ACT or GPA is too low then we return a 0
-			} else if (this.act_score == 1 || this.firstyear_gpa_score == 1) {
-				this.weighted_score = 0;
-			// the ACT score is valid but they do not have a GPA so we use a partial formula
-			} else if ((this.act_score >= 16 && this.act_score <= 36) && this.firstyear_gpa_score == 0) {
-				//weighted_score = act_score * 4.166;
-				this.weighted_score = this.act_score * 0;
-			// they do not have an ACT score but they DO have a valid GPA so we use a partial formula
-			} else if (this.act_score == 0 && (this.firstyear_gpa_score >= 2.0 && this.firstyear_gpa_score <= 4.0)) {
-				//weighted_score = firstyear_gpa_score * 37.5;
-				this.weighted_score = this.firstyear_gpa_score * 0;
-			// the ACT score is valid AND the GPA is valid so we use full formula
-			} else if ((this.act_score >= 16 && this.act_score <= 36) && (this.firstyear_gpa_score >= 2.0 && this.firstyear_gpa_score <= 4.0)) {
-				this.weighted_score = (this.act_score * 2.77778) + (this.firstyear_gpa_score * 25);
-			// the ACT score is invalid so we can't run the formula
-			} else {
-				this.weighted_score = -1;
-			}
-			//Update_NewStudent_Index_Score(this.weighted_score);
-		},
+		// Update_FirstYearStudent_Score() {
+		// 	// one of the numbers are not valid so we return a 0 scholarship
+		// 	if (this.act_score == -1 || this.firstyear_gpa_score == -1) {
+		// 		this.weighted_score = -1;
+		// 	// if the ACT or GPA is too low then we return a 0
+		// 	} else if (this.act_score == 1 || this.firstyear_gpa_score == 1) {
+		// 		this.weighted_score = 0;
+		// 	// the ACT score is valid but they do not have a GPA so we use a partial formula
+		// 	} else if ((this.act_score >= 16 && this.act_score <= 36) && this.firstyear_gpa_score == 0) {
+		// 		//weighted_score = act_score * 4.166;
+		// 		this.weighted_score = this.act_score * 0;
+		// 	// they do not have an ACT score but they DO have a valid GPA so we use a partial formula
+		// 	} else if (this.act_score == 0 && (this.firstyear_gpa_score >= 2.0 && this.firstyear_gpa_score <= 4.0)) {
+		// 		//weighted_score = firstyear_gpa_score * 37.5;
+		// 		this.weighted_score = this.firstyear_gpa_score * 0;
+		// 	// the ACT score is valid AND the GPA is valid so we use full formula
+		// 	} else if ((this.act_score >= 16 && this.act_score <= 36) && (this.firstyear_gpa_score >= 2.0 && this.firstyear_gpa_score <= 4.0)) {
+		// 		this.weighted_score = (this.act_score * 2.77778) + (this.firstyear_gpa_score * 25);
+		// 	// the ACT score is invalid so we can't run the formula
+		// 	} else {
+		// 		this.weighted_score = -1;
+		// 	}
+		// 	//Update_NewStudent_Index_Score(this.weighted_score);
+		// },
 		
 		Update_TransferStudent_Score() {
 			if (this.transfer_gpa_score < 0) {
@@ -219,7 +229,7 @@ export default {
 			} else if (this.transfer_gpa_score > 0 && this.transfer_gpa_score < 2.5) {
 				this.scholarship_value = 0;
 				this.cta_link = '#contact';
-				$("#scholarship_indexlevel").html("<p>According to the GPA you entered, you are not eligible for an automatic scholarship, but please check out our <a href=\"#scholarships\">additional scholarship opportunities</a>.  If you have any questions, please donâ€™t hesitate to contact us.</p><p><a href=\"" + this.cta_link + "\" class=\"btn btn-primary btn-sm\">Contact Us</a></p>");
+				$("#scholarship_indexlevel").html("<p>According to the GPA you entered, you are not eligible for an automatic scholarship, but please check out our <a href=\"#scholarships\">additional scholarship opportunities</a>.  If you have any questions, please don't hesitate to contact us.</p><p><a href=\"" + this.cta_link + "\" class=\"btn btn-primary btn-sm\">Contact Us</a></p>");
 			} else if (this.transfer_gpa_score >= 2.5 && this.transfer_gpa_score < 3) {
 				this.scholarship_value = 500;
 				this.cta_link = 'transfer-500';
@@ -227,8 +237,7 @@ export default {
 				$("#contact-admissions").addClass("hidden");
 				$("#additional-scholarships").removeClass("hidden");
 				$("#scholarship-form").attr("action", "https://www.fhsu.edu/finaid/scholarships/transfer-500");
-				/*$("#scholarship_indexlevel").html("<p>Congratulations!  As a transfer student, your GPA makes you eligible for a university scholarship worth <b> $" + scholarship_value + "</b>.<p><input type=\"submit\" value=\"Claim Scholarship \"  class=\"btn btn-primary btn-sm\" onclick=\"validateCheckbox()\"></p>");*/
-				$("#scholarship_indexlevel").html("<p>Congratulations!  As a transfer student, your GPA makes you eligible for a university scholarship worth <b> $" + this.scholarship_value + "</b>.</p><p><a href=\"https://www.fhsu.edu/finaid/scholarships/" + this.cta_link + "\" class=\"btn btn-primary btn-sm\">Claim Scholarship</a></p>");
+				$("#scholarship_indexlevel").html("<p>Congratulations!  As a transfer student, your GPA makes you eligible for a university scholarship worth <b> $" + this.scholarship_value + "</b>.</p><p><a href=\"https://www.fhsu.edu/finaid/scholarships/" + this.cta_link + "\" class=\"btn btn-primary btn-sm\" onclick=\"validateCheckbox()\">Claim Scholarship</a></p>");
 			} else if (this.transfer_gpa_score >= 3 && this.transfer_gpa_score < 3.5) {
 				this.scholarship_value = 1000;
 				this.cta_link = 'transfer-1000';
@@ -236,8 +245,7 @@ export default {
 				$("#contact-admissions").addClass("hidden");
 				$("#additional-scholarships").removeClass("hidden");
 				$("#scholarship-form").attr("action", "https://www.fhsu.edu/finaid/scholarships/transfer-1000");
-				/*$("#scholarship_indexlevel").html("<p>Congratulations!  As a transfer student, your GPA makes you eligible for a university scholarship worth <b> $" + scholarship_value + "</b>.<p><input type=\"submit\" value=\"Claim Scholarship \"  class=\"btn btn-primary btn-sm\" onclick=\"validateCheckbox()\"></p>");*/
-				$("#scholarship_indexlevel").html("<p>Congratulations!  As a transfer student, your GPA makes you eligible for a university scholarship worth <b> $" + this.scholarship_value + "</b>.</p><p><a href=\"https://www.fhsu.edu/finaid/scholarships/" + this.cta_link + "\" class=\"btn btn-primary btn-sm\">Claim Scholarship</a></p>");
+				$("#scholarship_indexlevel").html("<p>Congratulations!  As a transfer student, your GPA makes you eligible for a university scholarship worth <b> $" + this.scholarship_value + "</b>.</p><p><a href=\"https://www.fhsu.edu/finaid/scholarships/" + this.cta_link + "\" class=\"btn btn-primary btn-sm\" onclick=\"validateCheckbox()\">Claim Scholarship</a></p>");
 			} else if (this.transfer_gpa_score >= 3.5) {
 				this.scholarship_value = 1500;
 				this.cta_link = 'transfer-1500';
@@ -245,23 +253,15 @@ export default {
 				$("#contact-admissions").addClass("hidden");
 				$("#additional-scholarships").removeClass("hidden");
 				$("#scholarship-form").attr("action", "https://www.fhsu.edu/finaid/scholarships/transfer-1500");
-				/*$("#scholarship_indexlevel").html("<p>Congratulations!  As a transfer student, your GPA makes you eligible for a university scholarship worth <b> $" + scholarship_value + "</b>.<p><input type=\"submit\" value=\"Claim Scholarship \"  class=\"btn btn-primary btn-sm\" onclick=\"validateCheckbox()\"></p>");*/
-				$("#scholarship_indexlevel").html("<p>Congratulations!  As a transfer student, your GPA makes you eligible for a university scholarship worth <b> $" + this.scholarship_value + "</b>.</p><p><a href=\"https://www.fhsu.edu/finaid/scholarships/" + this.cta_link + "\" class=\"btn btn-primary btn-sm\">Claim Scholarship</a></p>");
+				$("#scholarship_indexlevel").html("<p>Congratulations!  As a transfer student, your GPA makes you eligible for a university scholarship worth <b> $" + this.scholarship_value + "</b>.</p><p><a href=\"https://www.fhsu.edu/finaid/scholarships/" + this.cta_link + "\" class=\"btn btn-primary btn-sm\" onclick=\"validateCheckbox()\">Claim Scholarship</a></p>");
 			} else {
 				this.scholarship_value = 0;
 				$("#scholarship_indexlevel").html("");
 			}
-			// write the result to the screen
-			$("#scholarshipsubtotal").text(this.scholarship_value.toLocaleString());
-			if (this.scholarship_value == 0) {
-				$("#forScholarship").css("color", "red");
-				//Math.abs(Number($('#scholarshipsubtotal').val()));    
-			} else {
-				$("#forScholarship").css("color", "#F6AF32");
-			}
 		},
-		Update_NewStudent_Index_Score(academic_rating) {
-			if (academic_rating >= 173) {
+
+		Update_NewStudent_Index_Score() {
+			if ((this.act_score >= 30) || this.firstyear_gpa_score >= 3.6) {
 				this.index_level = 1;
 				this.scholarship_name = "Tiger Pride Scholarship";
 				this.scholarship_value = 15000;
@@ -271,7 +271,8 @@ export default {
 				$("#contact-admissions").addClass("hidden");
 				$("#additional-scholarships").removeClass("hidden");
 				$("#scholarship-form").attr("action", "https://www.fhsu.edu/finaid/scholarships/tiger-pride-scholarship" + "?act_sat_score=" + this.act_score + "&cumulative_high_school_gpa=" + this.firstyear_gpa_score);
-			} else if (academic_rating >= 163 && this.academic_rating < 173) {
+			} else if ((this.act_score >= 29) || this.firstyear_gpa_score >= 3.5) {
+				this.index_level = 2;
 				this.scholarship_value = 11000;
 				this.scholarship_year_value = 2750;
 				this.scholarship_name = "Victor E. Scholarship";
@@ -280,7 +281,7 @@ export default {
 				$("#contact-admissions").addClass("hidden");
 				$("#additional-scholarships").removeClass("hidden");
 				$("#scholarship-form").attr("action", "https://www.fhsu.edu/finaid/scholarships/victor-e-scholarship" + "?act_sat_score=" + this.act_score + "&cumulative_high_school_gpa=" + this.firstyear_gpa_score);
-			} else if (academic_rating >= 153 && this.academic_rating < 163) {
+			} else if ((this.act_score >= 28) || this.firstyear_gpa_score >= 3.40) {
 				this.index_level = 3;
 				this.scholarship_value = 8000;
 				this.scholarship_year_value = 2000;
@@ -290,7 +291,7 @@ export default {
 				$("#contact-admissions").addClass("hidden");
 				$("#additional-scholarships").removeClass("hidden");
 				$("#scholarship-form").attr("action", "https://www.fhsu.edu/finaid/scholarships/black-gold-scholarship" + "?act_sat_score=" + this.act_score + "&cumulative_high_school_gpa=" + this.firstyear_gpa_score);
-			} else if ((academic_rating >= 142 && this.academic_rating < 153) && (this.noTestScore.value != 0)) {
+			} else if ((this.act_score >= 27) || this.firstyear_gpa_score >= 2.70) {
 				this.index_level = 4;
 				this.scholarship_name = "Hays City Scholarship";
 				this.scholarship_value = 6000;
@@ -300,8 +301,7 @@ export default {
 				$("#contact-admissions").addClass("hidden");
 				$("#additional-scholarships").removeClass("hidden");
 				$("#scholarship-form").attr("action", "https://www.fhsu.edu/finaid/scholarships/hays-city-scholarship" + "?act_sat_score=" + this.act_score + "&cumulative_high_school_gpa=" + this.firstyear_gpa_score);
-			}
-			else if (academic_rating >= 0 && this.academic_rating < 142) {
+			} else if ((this.act_score >= 18) || this.firstyear_gpa_score >= 2.25) {
 				this.index_level = 5;
 				this.scholarship_value = 0;
 				this.cta_link = "admissions-staff";
@@ -316,27 +316,16 @@ export default {
 			}
 			// level 4 receives a scholarship
 			if (this.index_level == 1) {
-				$("#scholarship_indexlevel").html("<div v-if=\"scholarshipGiven\"><h3>Congratulations!</h3><div class=\"row row-cols-1 row-cols-md-3 mb-3 text-center\"> <div class=\"col\"> <div class=\"card mb-4 rounded-3 shadow-sm\"> <div class=\"card-header py-3\"> <h4 class=\"my-0 fw-normal\">" + this.scholarship_name + "</h4></div> <div class=\"card-body\"> <h1 class=\"card-title pricing-card-title\">$" + this.scholarship_value + "</h1> <ul class=\"list-unstyled mt-3 mb-4\"> <li>$" + this.scholarship_year_value + " First Year <li>Renewable For Three Years</ul> <button type=\"submit\" value=\"Claim Scholarship\" class=\"w-40 btn btn-lg btn-primary\" onclick=\"validateCheckbox()\">Claim Scholarship</button></div>");
-				$("#additional-scholarships").html("<p><em>*All first-time, full-time, on-campus Freshman ACT/SAT Scholarships are renewable for three additional years if at least a 3.3 FHSU cumulative GPA is maintained. FHSU must receive your test scores by June 30, 2022  to be eligible.</em></p>")
+				$("#scholarship_indexlevel").html("<div v-if=\"scholarshipGiven\"><p>Congratulations!  As a first time student, your ACT/SAT and GPA make for the <b>" + this.scholarship_name + "</b> worth <b>$" + this.scholarship_value + "</b>. <br>You will receive <b>$" + this.scholarship_year_value + "</b> your first year, and It is renewable for three years.<br>" + "<p><a href=\"https://www.fhsu.edu/finaid/scholarships/" + this.cta_link + "\" class=\"btn btn-primary btn-sm\" onclick=\"validateCheckbox()\">Claim Scholarship</a></p></div>");				
 			// levels 1-3 receive a scholarship
 			} else if (this.index_level >= 2 && this.index_level <= 4) {
-				$("#scholarship_indexlevel").html("<div v-if=\"scholarshipGiven\"><h3>Congratulations!</h3><div class=\"row row-cols-1 row-cols-md-3 mb-3 text-center\"> <div class=\"col\"> <div class=\"card mb-4 rounded-3 shadow-sm\"> <div class=\"card-header py-3\"> <h4 class=\"my-0 fw-normal\">" + this.scholarship_name + "</h4></div> <div class=\"card-body\"> <h1 class=\"card-title pricing-card-title\">$" + this.scholarship_value + "</h1> <ul class=\"list-unstyled mt-3 mb-4\"> <li>$" + this.scholarship_year_value + " First Year <li>Renewable For Three Years</ul> <button type=\"submit\" value=\"Claim Scholarship\" class=\"w-40 btn btn-lg btn-primary\" onclick=\"validateCheckbox()\">Claim Scholarship</button></div>");
-				$("#additional-scholarships").html("<p><em>*All first-time, full-time, on-campus Freshman ACT/SAT Scholarships are renewable for three additional years if at least a 3.3 FHSU cumulative GPA is maintained. FHSU must receive your test scores by June 30, 2022  to be eligible.</em></p>")
+				$("#scholarship_indexlevel").html("<div v-if=\"scholarshipGiven\"><p>Congratulations!  As a first time student, your ACT/SAT and GPA make for the <b>" + this.scholarship_name + "</b> worth <b>$" + this.scholarship_value + "</b>. <br>You will receive <b>$" + this.scholarship_year_value + "</b> your first year, and it is renewable for three years.<br>" + "<p><a href=\"https://www.fhsu.edu/finaid/scholarships/" + this.cta_link + "\" class=\"btn btn-primary btn-sm\" onclick=\"validateCheckbox()\">Claim Scholarship</a></p></div>");				
 			// any other level does not recieve a scholarship
-			} else if (this.index_level > 4) {
+			} else if ((this.act_score >= 24) || this.firstyear_gpa_score >= 3.00) {
 				$("#scholarship_indexlevel").html("<div v-if=\"scholarshipGiven\"><p>According to the scores you entered, you don't currently qualify for an automatic freshman scholarship, If you have any questions, please fill out the form below and our admissions staff will be happy to visit with you about other potential scholarship opportunities.</p></div>");
-				$("#additional-scholarships").html("<p><em>*All first-time, full-time, on-campus Freshman ACT/SAT Scholarships are renewable for three additional years if at least a 3.3 FHSU cumulative GPA is maintained. FHSU must receive your test scores by June 30, 2022  to be eligible.</em></p>")
 			// an invalid index level means clear the message
 			} else {
 				$("#scholarship_indexlevel").html("");
-			}
-			// write the result to the screen
-			$("#scholarshipsubtotal").text(this.scholarship_value.toLocaleString());
-			if (this.scholarship_value == 0) {
-				$("#forScholarship").css("color", "red");
-				//Math.abs(Number($('#scholarshipsubtotal').val()));    
-			} else {
-				$("#forScholarship").css("color", "#F6AF32");
 			}
 		},
     },
@@ -500,7 +489,6 @@ padding: 15px 10px 5px 10px;
 }
 label[for="agree"]{
 font-size: 14px;
-margin: 0 0 0 200px;
 margin-top: -5px;
 font-weight: bold;
 }
