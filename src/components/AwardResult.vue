@@ -11,7 +11,7 @@
     <div class="scholarship-form">
 		<h3 class="scholarship-form-header" id="estimator">Scholarship Estimator&#160;</h3>
 		<!-- Form for selecting First Year or Transfer Student -->
-        <form @submit.prevent="calculateScholarship" method="POST" id="scholarship-form">
+        <!-- <form @submit="calculateScholarship" method="POST" id="scholarship-form"> -->
 			<div class="d-flex justify-content-center">
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" name="scholarship_student_type" type="radio" ref="scholarship_firstyearstudent_radio" value="firstYear" v-model="studentType" id="scholarship_firstyearstudent_radio">
@@ -46,11 +46,13 @@
 							</div>
 						</div>
 					</div>
-					<div class="form-group text-center">
-						<button type="submit" class="btn btn-primary btn-sm">Calculate Scholarship</button>
-					</div>
+					<form @submit.prevent="calculateScholarship" method="POST" id="scholarship-form"> 
+						<div class="form-group text-center">
+							<button type="submit" class="btn btn-primary btn-sm">Calculate Scholarship</button>
+						</div>
+					</form>
+					<br>
 					<div v-if="scholarship_value">
-						<div class="col-lg-10" id="scholarship_indexlevel">&#160;</div>
 						<div class="agree-wrapper" v-show="scholarship_value && !agreedToTerms" id="agree-wrapper">
 							<p>
 								I understand that the information I am about to preview is an unofficial offer due to self-reported 
@@ -67,12 +69,13 @@
 								</label>
 							</div>
 						</div>
-						<div id="additional-scholarships">
-							<p><em>
-								*All first-time, full-time, on-campus Freshman ACT/SAT Scholarships are renewable for three additional years if at least a 3.3 FHSU cumulative GPA is maintained. 
-								FHSU must receive your test scores by June 30, 2022  to be eligible.
-							</em></p>
-						</div>
+					</div>
+					<div class="col-lg-10" id="scholarship_indexlevel">&#160;</div>
+					<div id="additional-scholarships">
+						<p><em>
+							*All first-time, full-time, on-campus Freshman ACT/SAT Scholarships are renewable for three additional years if at least a 3.3 FHSU cumulative GPA is maintained. 
+							FHSU must receive your test scores by June 30, 2022  to be eligible.
+						</em></p>
 					</div>
 				</div>
 
@@ -87,11 +90,14 @@
 							</div>
 						</div>
 					</div>
-					<div class="form-group text-center">
-						<button type="submit" class="btn btn-primary btn-sm">Calculate Scholarship</button>
-					</div>
+					
+					<form @submit.prevent="calculateScholarship" method="POST" id="scholarship-form"> 
+						<div class="form-group text-center">
+							<button type="submit" class="btn btn-primary btn-sm">Calculate Scholarship</button>
+						</div>
+					</form>
+					<br>
 					<div v-if="scholarship_value">
-						<div class="col-lg-10" id="scholarship_indexlevel">&#160;</div>
 						<div class="agree-wrapper" v-show="scholarship_value && !agreedToTerms" id="agree-wrapper">
 							<p>
 								I understand that the information I am about to preview is an unofficial offer due to self-reported 
@@ -109,9 +115,10 @@
 							</div>
 						</div>
 					</div>
+					<div class="col-lg-10" id="scholarship_indexlevel">&#160;</div>
 				</div>
 			</div>
-		</form>
+		<!-- </form> -->
 	</div>
 </template>
 
@@ -126,7 +133,6 @@ export default {
         return {
 			studentType: 'firstYear',
             act_score: 0,
-			weighted_score: 0,
 			firstyear_gpa_score: 0,
 			transfer_gpa_score: 0,
 			index_level: 0,
@@ -269,7 +275,6 @@ export default {
 				this.cta_link = 'tiger-pride-scholarship';
 				$("#agree-wrapper").removeClass("hidden");
 				$("#contact-admissions").addClass("hidden");
-				$("#additional-scholarships").removeClass("hidden");
 				$("#scholarship-form").attr("action", "https://www.fhsu.edu/finaid/scholarships/tiger-pride-scholarship" + "?act_sat_score=" + this.act_score + "&cumulative_high_school_gpa=" + this.firstyear_gpa_score);
 			} else if ((this.act_score >= 29) || this.firstyear_gpa_score >= 3.5) {
 				this.index_level = 2;
@@ -279,7 +284,6 @@ export default {
 				this.cta_link = "victor-e-scholarship";
 				$("#agree-wrapper").removeClass("hidden");
 				$("#contact-admissions").addClass("hidden");
-				$("#additional-scholarships").removeClass("hidden");
 				$("#scholarship-form").attr("action", "https://www.fhsu.edu/finaid/scholarships/victor-e-scholarship" + "?act_sat_score=" + this.act_score + "&cumulative_high_school_gpa=" + this.firstyear_gpa_score);
 			} else if ((this.act_score >= 28) || this.firstyear_gpa_score >= 3.40) {
 				this.index_level = 3;
@@ -289,7 +293,6 @@ export default {
 				this.cta_link = "black-gold-scholarship";
 				$("#agree-wrapper").removeClass("hidden");
 				$("#contact-admissions").addClass("hidden");
-				$("#additional-scholarships").removeClass("hidden");
 				$("#scholarship-form").attr("action", "https://www.fhsu.edu/finaid/scholarships/black-gold-scholarship" + "?act_sat_score=" + this.act_score + "&cumulative_high_school_gpa=" + this.firstyear_gpa_score);
 			} else if ((this.act_score >= 27) || this.firstyear_gpa_score >= 2.70) {
 				this.index_level = 4;
@@ -299,7 +302,6 @@ export default {
 				this.cta_link = "hays-city-scholarship";
 				$("#agree-wrapper").removeClass("hidden");
 				$("#contact-admissions").addClass("hidden");
-				$("#additional-scholarships").removeClass("hidden");
 				$("#scholarship-form").attr("action", "https://www.fhsu.edu/finaid/scholarships/hays-city-scholarship" + "?act_sat_score=" + this.act_score + "&cumulative_high_school_gpa=" + this.firstyear_gpa_score);
 			} else if ((this.act_score >= 18) || this.firstyear_gpa_score >= 2.25) {
 				this.index_level = 5;
@@ -307,19 +309,17 @@ export default {
 				this.cta_link = "admissions-staff";
 				$("#agree-wrapper").addClass("hidden");
 				$("#contact-admissions").removeClass("hidden");
-				$("#additional-scholarships").addClass("hidden");
 			} else {
 				this.index_level = -1;
 				this.scholarship_value = 0;
 				$("#agree-wrapper").addClass("hidden");
-				$("#additional-scholarships").addClass("hidden");
 			}
 			// level 4 receives a scholarship
 			if (this.index_level == 1) {
-				$("#scholarship_indexlevel").html("<div v-if=\"scholarshipGiven\"><p>Congratulations!  As a first time student, your ACT/SAT and GPA make for the <b>" + this.scholarship_name + "</b> worth <b>$" + this.scholarship_value + "</b>. <br>You will receive <b>$" + this.scholarship_year_value + "</b> your first year, and It is renewable for three years.<br>" + "<p><a href=\"https://www.fhsu.edu/finaid/scholarships/" + this.cta_link + "\" class=\"btn btn-primary btn-sm\" onclick=\"validateCheckbox()\">Claim Scholarship</a></p></div>");				
+				$("#scholarship_indexlevel").html("<div v-if=\"scholarshipGiven\"><p>Congratulations!  As a first time student, your ACT/SAT and GPA make for the <b>" + this.scholarship_name + "</b> worth <b>$" + this.scholarship_value + "</b>. <br>You will receive <b>$" + this.scholarship_year_value + "</b> your first year, and It is renewable for three years.<br>" + "<p><a href=\"https://www.fhsu.edu/finaid/scholarships/" + this.cta_link + "\" class=\"btn btn-primary btn-sm\" :disabled=\"!agreedToTerms\">Claim Scholarship</a></p></div>");				
 			// levels 1-3 receive a scholarship
 			} else if (this.index_level >= 2 && this.index_level <= 4) {
-				$("#scholarship_indexlevel").html("<div v-if=\"scholarshipGiven\"><p>Congratulations!  As a first time student, your ACT/SAT and GPA make for the <b>" + this.scholarship_name + "</b> worth <b>$" + this.scholarship_value + "</b>. <br>You will receive <b>$" + this.scholarship_year_value + "</b> your first year, and it is renewable for three years.<br>" + "<p><a href=\"https://www.fhsu.edu/finaid/scholarships/" + this.cta_link + "\" class=\"btn btn-primary btn-sm\" onclick=\"validateCheckbox()\">Claim Scholarship</a></p></div>");				
+				$("#scholarship_indexlevel").html("<div v-if=\"scholarshipGiven\"><p>Congratulations!  As a first time student, your ACT/SAT and GPA make for the <b>" + this.scholarship_name + "</b> worth <b>$" + this.scholarship_value + "</b>. <br>You will receive <b>$" + this.scholarship_year_value + "</b> your first year, and it is renewable for three years.<br>" + "<p><a href=\"https://www.fhsu.edu/finaid/scholarships/" + this.cta_link + "\" class=\"btn btn-primary btn-sm\" :disabled=\"!agreedToTerms\">Claim Scholarship</a></p></div>");				
 			// any other level does not recieve a scholarship
 			} else if ((this.act_score >= 24) || this.firstyear_gpa_score >= 3.00) {
 				$("#scholarship_indexlevel").html("<div v-if=\"scholarshipGiven\"><p>According to the scores you entered, you don't currently qualify for an automatic freshman scholarship, If you have any questions, please fill out the form below and our admissions staff will be happy to visit with you about other potential scholarship opportunities.</p></div>");
