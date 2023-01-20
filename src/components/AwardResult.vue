@@ -53,7 +53,7 @@
 					</form>
 					<br>
 					<div v-if="scholarship_value">
-						<div class="agree-wrapper" v-show="scholarship_value && !agreedToTerms" id="agree-wrapper">
+						<div class="agree-wrapper" v-show="!agreedToTerms" id="agree-wrapper">
 							<p>
 								I understand that the information I am about to preview is an unofficial offer due to self-reported 
 								information. This information is true and correct to the best of my knowledge and ability. 
@@ -64,13 +64,60 @@
 							<!-- Terms and Conditions -->
 							<div class="d-flex justify-content-center">
 								<label class="agree-label" for="agree">
-									<input type="checkbox" v-model="agreedToTerms" id="agree" required/>
+									<input type="checkbox" v-model="agreedToTerms" id="agree"/>
 									I Understand
 								</label>
 							</div>
 						</div>
+						<br>
+						<div v-if="index_level === 1">
+							<p>Congratulations! As a first time student, your ACT/SAT and GPA make for the <b>Tiger Pride Scholarship</b> worth <b>$15,000</b>. 
+								<br> You will receive <b>$3,750</b> your first year, and it is renewable for three years.</p>
+							<p>
+								<button class="btn btn-primary btn-sm" v-if="agreedToTerms"> 
+									<a :href="'https://www.fhsu.edu/finaid/scholarships/' + cta_link"></a>
+									Claim Scholarship
+								</button>
+							</p>
+						</div>
+						<div v-else-if="index_level === 2">
+							<p>Congratulations! As a first time student, your ACT/SAT and GPA make for the <b>Victor E. Scholarship</b> worth <b>$11,000</b>. 
+								<br> You will receive <b>$2,750</b> your first year, and it is renewable for three years.</p>
+							<p>
+								<button class="btn btn-primary btn-sm" v-if="agreedToTerms"> 
+									<a :href="'https://www.fhsu.edu/finaid/scholarships/' + cta_link"></a>
+									Claim Scholarship
+								</button>
+							</p>
+						</div>
+						<div v-else-if="index_level === 3">
+							<p>Congratulations! As a first time student, your ACT/SAT and GPA make for the <b>Black & Gold Scholarship</b> worth <b>$8,000</b>. 
+								<br> You will receive <b>$2,000</b> your first year, and it is renewable for three years.</p>
+							<p>
+								<button class="btn btn-primary btn-sm" v-if="agreedToTerms"> 
+									<a :href="'https://www.fhsu.edu/finaid/scholarships/' + cta_link"></a>
+									Claim Scholarship
+								</button>
+							</p>
+						</div>
+						<div v-else-if="index_level === 4">
+							<p>Congratulations! As a first time student, your ACT/SAT and GPA make for the <b>Hays City Scholarship</b> worth <b>$6,000</b>. 
+								<br> You will receive <b>$1,500</b> your first year, and it is renewable for three years.</p>
+							<p>
+								<button class="btn btn-primary btn-sm" v-if="agreedToTerms"> 
+									<a :href="'https://www.fhsu.edu/finaid/scholarships/' + cta_link"></a>
+									Claim Scholarship
+								</button>
+							</p>
+						</div>
+						<div v-else-if="index_level === 5">
+							<p>According to the scores you entered, you don't currently qualify for an automatic freshman scholarship.
+								If you have any questions, please fill out the form below and our admissions staff will be happy to visit 
+								with you about other potential scholarship opportunities.
+							</p>
+						</div>
 					</div>
-					<div class="col-lg-10" id="scholarship_indexlevel">&#160;</div>
+
 					<div id="additional-scholarships">
 						<p><em>
 							*All first-time, full-time, on-campus Freshman ACT/SAT Scholarships are renewable for three additional years if at least a 3.3 FHSU cumulative GPA is maintained. 
@@ -109,7 +156,7 @@
 							<!-- Terms and Conditions -->
 							<div class="d-flex justify-content-center">
 								<label class="agree-label" for="agree">
-									<input type="checkbox" v-model="agreedToTerms" id="agree" required/>
+									<input type="checkbox" v-model="agreedToTerms" id="agree"/>
 									I Understand
 								</label>
 							</div>
@@ -141,7 +188,6 @@ export default {
 			scholarship_year_value: 0,
 			cta_link: '',
 			agreedToTerms: false,
-			claimed: false,
 		};
     },
     methods: {
@@ -309,22 +355,11 @@ export default {
 				this.cta_link = "admissions-staff";
 				$("#agree-wrapper").addClass("hidden");
 				$("#contact-admissions").removeClass("hidden");
+				$("#scholarship_indexlevel").html("");
 			} else {
 				this.index_level = -1;
 				this.scholarship_value = 0;
 				$("#agree-wrapper").addClass("hidden");
-			}
-			// level 4 receives a scholarship
-			if (this.index_level == 1) {
-				$("#scholarship_indexlevel").html("<div v-if=\"scholarshipGiven\"><p>Congratulations!  As a first time student, your ACT/SAT and GPA make for the <b>" + this.scholarship_name + "</b> worth <b>$" + this.scholarship_value + "</b>. <br>You will receive <b>$" + this.scholarship_year_value + "</b> your first year, and It is renewable for three years.<br>" + "<p><a href=\"https://www.fhsu.edu/finaid/scholarships/" + this.cta_link + "\" class=\"btn btn-primary btn-sm\" :disabled=\"!agreedToTerms\">Claim Scholarship</a></p></div>");				
-			// levels 1-3 receive a scholarship
-			} else if (this.index_level >= 2 && this.index_level <= 4) {
-				$("#scholarship_indexlevel").html("<div v-if=\"scholarshipGiven\"><p>Congratulations!  As a first time student, your ACT/SAT and GPA make for the <b>" + this.scholarship_name + "</b> worth <b>$" + this.scholarship_value + "</b>. <br>You will receive <b>$" + this.scholarship_year_value + "</b> your first year, and it is renewable for three years.<br>" + "<p><a href=\"https://www.fhsu.edu/finaid/scholarships/" + this.cta_link + "\" class=\"btn btn-primary btn-sm\" :disabled=\"!agreedToTerms\">Claim Scholarship</a></p></div>");				
-			// any other level does not recieve a scholarship
-			} else if ((this.act_score >= 24) || this.firstyear_gpa_score >= 3.00) {
-				$("#scholarship_indexlevel").html("<div v-if=\"scholarshipGiven\"><p>According to the scores you entered, you don't currently qualify for an automatic freshman scholarship, If you have any questions, please fill out the form below and our admissions staff will be happy to visit with you about other potential scholarship opportunities.</p></div>");
-			// an invalid index level means clear the message
-			} else {
 				$("#scholarship_indexlevel").html("");
 			}
 		},
@@ -333,6 +368,16 @@ export default {
 </script>
 
 <style scoped>
+a {
+    color: white;
+    text-decoration: none;
+    background-color: transparent;
+}
+
+a:hover {
+    color: white;
+    text-decoration: underline;
+}
 .slider-component .slidecontainer .slider {
     -webkit-appearance: none;
     appearance: none;
